@@ -1,32 +1,48 @@
 package com.zhouyu.service;
 
-import org.springframework.aop.framework.AopContext;
+
+import com.zhouyu.Hello;
+import org.aspectj.weaver.SourceContextImpl;
+import org.aspectj.weaver.ast.Or;
+import org.jetbrains.annotations.NotNull;
+import org.springframework.beans.PropertyValue;
 import org.springframework.beans.factory.BeanNameAware;
-import org.springframework.beans.factory.InitializingBean;
+import org.springframework.beans.factory.DisposableBean;
+import org.springframework.beans.factory.SmartInitializingSingleton;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.context.annotation.Bean;
+import org.springframework.beans.factory.annotation.Lookup;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.context.EnvironmentAware;
+import org.springframework.context.annotation.DependsOn;
 import org.springframework.context.annotation.Lazy;
 import org.springframework.context.annotation.Scope;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.scheduling.annotation.Scheduled;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Component;
-import org.springframework.transaction.annotation.Propagation;
-import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.context.annotation.RequestScope;
+import org.springframework.web.context.annotation.SessionScope;
+import org.springframework.web.cors.reactive.CorsWebFilter;
+import sun.java2d.opengl.OGLSurfaceData;
 
 import javax.annotation.PostConstruct;
-import java.util.Date;
+import javax.annotation.PreDestroy;
+import javax.annotation.Resource;
+import java.lang.reflect.Field;
+import java.util.List;
+import java.util.Map;
+import java.util.Stack;
 
 @Component
-public class UserService {
+public  class UserService extends BaseService<OrderService,StockService> {
 
-	@Autowired
-	private OrderService orderService;
 
 	public void test(){
-		System.out.println(orderService);
+		System.out.println(o);
+		System.out.println(s);
+
 	}
 
 
-
-
 }
+

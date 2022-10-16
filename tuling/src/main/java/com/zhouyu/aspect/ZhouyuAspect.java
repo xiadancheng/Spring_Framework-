@@ -12,7 +12,7 @@ import org.springframework.stereotype.Component;
 @Component
 public class ZhouyuAspect {
 
-	@Pointcut("execution(public void com.zhouyu.service.UserService.test())")
+	@Pointcut("execution(public void com.zhouyu.service2.AService.test())")
 	public void a(){
 
 	}
@@ -20,6 +20,10 @@ public class ZhouyuAspect {
 	@Before("a()")
 	public void zhouyuBefore(JoinPoint joinPoint) {
 		System.out.println("zhouyuBefore");
+	}
+	@After("a()")
+	public void zhouyuAfter2(JoinPoint joinPoint) {
+		System.out.println("zhouyuAfter");
 	}
 
 

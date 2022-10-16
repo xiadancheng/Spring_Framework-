@@ -1,83 +1,66 @@
 package com.zhouyu;
 
+import com.zhouyu.service.OrderService;
 import com.zhouyu.service.User;
 import com.zhouyu.service.UserService;
-import org.aopalliance.aop.Advice;
-import org.aopalliance.intercept.MethodInterceptor;
-import org.aopalliance.intercept.MethodInvocation;
-import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
-import org.springframework.aop.Pointcut;
-import org.springframework.aop.framework.ProxyFactory;
-import org.springframework.aop.support.AbstractPointcutAdvisor;
-import org.springframework.beans.factory.InitializingBean;
-import org.springframework.beans.factory.annotation.Autowired;
+import com.zhouyu.service2.AService;
+import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessor;
+import org.springframework.beans.factory.config.RuntimeBeanReference;
 import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionBuilder;
-import org.springframework.cglib.proxy.Enhancer;
-import org.springframework.cglib.proxy.MethodProxy;
-import org.springframework.context.ApplicationContext;
+import org.springframework.beans.factory.support.MergedBeanDefinitionPostProcessor;
+import org.springframework.context.ApplicationEvent;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
+import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
+import org.springframework.context.annotation.Configuration;
+import org.springframework.context.event.EventListener;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+import org.springframework.core.annotation.Order;
+import org.springframework.core.type.AnnotationMetadata;
+import org.springframework.core.type.ClassMetadata;
+import org.springframework.core.type.classreading.MetadataReader;
+import org.springframework.core.type.classreading.SimpleMetadataReaderFactory;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.support.AnnotationConfigWebApplicationContext;
 
-import javax.annotation.PostConstruct;
+import java.io.IOException;
 import java.lang.reflect.Field;
-import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.concurrent.ScheduledThreadPoolExecutor;
-import java.util.concurrent.TimeUnit;
+import java.lang.reflect.Parameter;
+import java.lang.reflect.TypeVariable;
+import java.security.PrivateKey;
+import java.security.PublicKey;
+import java.util.function.Supplier;
+
 
 public class Test {
 
-	public static void main(String[] args) {
+	public static void main(String[] args) throws IOException {
+//		BeanFactory------>解析配置------>扫描----->BeanDefinition------->beanDefinitionMap----->beanPostProcessor,单例池
+		AnnotationConfigApplicationContext context1 = new AnnotationConfigApplicationContext(AppConfig.class);
+/*//		AnnotationConfigWebApplicationContext context1 = new AnnotationConfigWebApplicationContext();
+		context1.register(AppConfig.class);
 
-		// 创建一个Spring容器
-		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(AppConfig.class);
+		context1.getEnvironment().setRequiredProperties("aaaa");
+		context1.refresh();
+//		Root WebApplicationContext
+		context1.publishEvent("111111");*/
 
-		UserService userService = (UserService) applicationContext.getBean("userService");
+		UserService userService = context1.getBean("userService", UserService.class);
 		userService.test();
 
 
-//		UserService userService1 = new UserService();
-//
-//		for (Field field : userService1.getClass().getDeclaredFields()) {
-//			if (field.isAnnotationPresent(Autowired.class)) {
-//				field.set(userService1, ??);
-//			}
-//		}
-//
-//
-//		for (Method method : userService1.getClass().getDeclaredMethods()) {
-//			if (method.isAnnotationPresent(PostConstruct.class)) {
-//				method.invoke(userService1, null);
-//			}
-//		}
-//
-//		if (userService1 instanceof InitializingBean) {
-//			try {
-//				((InitializingBean)userService1).afterPropertiesSet();
-//			} catch (Exception e) {
-//				e.printStackTrace();
-//			}
-//		}
-//
-//		ProxyFactory proxyFactory = new ProxyFactory();
-//		proxyFactory.setTarget(userService1);
-//		proxyFactory.addAdvice(new MethodInterceptor() {
-//			@Nullable
-//			@Override
-//			public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
-//				System.out.println("切面逻辑 before...");
-//				Object result = invocation.proceed();
-////				Object result = invocation.getMethod().invoke(invocation.getThis(), invocation.getArguments());
-//				System.out.println("切面逻辑 after...");
-//				return result;
-//			}
-//		});
-//		UserService userService2  = (UserService) proxyFactory.getProxy();
-//		userService2.test();
+	}
+
+
+
+
+
+
+
 
 	}
-}
+
 
 
 
