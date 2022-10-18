@@ -36,24 +36,40 @@ import java.util.function.Supplier;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-//		BeanFactory------>解析配置------>扫描----->BeanDefinition------->beanDefinitionMap----->beanPostProcessor,单例池
-		AnnotationConfigApplicationContext context1 = new AnnotationConfigApplicationContext(AppConfig.class);
-/*//		AnnotationConfigWebApplicationContext context1 = new AnnotationConfigWebApplicationContext();
+/*
+//		BeanFactory------>解析配置类------>扫描----->BeanDefinition------->beanDefinitionMap----->beanPostProcessor,单例池
+		AnnotationConfigApplicationContext context1 = new AnnotationConfigApplicationContext();
+//		AnnotationConfigWebApplicationContext context1 = new AnnotationConfigWebApplicationContext();
 		context1.register(AppConfig.class);
-
 		context1.getEnvironment().setRequiredProperties("aaaa");
 		context1.refresh();
-//		Root WebApplicationContext
-		context1.publishEvent("111111");*/
+		context1.publishEvent(123232326);//SimpleApplicationEventMulticaster(beanFactory)
+		UserService userService = (UserService) context1.getBean("userService");
 
-		UserService userService = context1.getBean("userService", UserService.class);
+*/
+
+	/*	AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
+//		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+		UserService userService = context.getBean("userService", UserService.class);
+		System.out.println(userService);*/
+
+/*
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(AppConfig.class);
+		AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
+		beanDefinition.setBeanClass(UserService.class);
+		beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(new OrderService());
+		beanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_CONSTRUCTOR);
+		context.registerBeanDefinition("userService",beanDefinition);
+		context.refresh();
+*/
+
+//		UserService userService =(UserService) context.getBean("userService",new OrderService(),new OrderService());
+
+		ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
+		UserService userService = (UserService) context.getBean("userService");
 		userService.test();
-
-
 	}
-
-
-
 
 
 
