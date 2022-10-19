@@ -158,7 +158,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		Assert.notNull(singletonFactory, "Singleton factory must not be null");
 		synchronized (this.singletonObjects) {
 			if (!this.singletonObjects.containsKey(beanName)) {
-				this.singletonFactories.put(beanName, singletonFactory);
+				this.singletonFactories.put(beanName, singletonFactory);//存在第三级缓存
 				this.earlySingletonObjects.remove(beanName);
 				this.registeredSingletons.add(beanName);
 			}
@@ -182,21 +182,29 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	@Nullable
 	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
 		// Quick check for existing instance without full singleton lock
+//		1.首先到单例池中取
 		Object singletonObject = this.singletonObjects.get(beanName);
-		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {
+//		如果单例池中为空，且发现该类正在创建bean
+		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {//解决循环依赖
+//		2.到二级缓存取
 			singletonObject = this.earlySingletonObjects.get(beanName);
-			if (singletonObject == null && allowEarlyReference) {
+//		3.二级缓存中为空，且支持循环依赖
+			if (singletonObject == null && allowEarlyReference) {//加个锁
 				synchronized (this.singletonObjects) {
 					// Consistent creation of early reference within full singleton lock
-					singletonObject = this.singletonObjects.get(beanName);
-					if (singletonObject == null) {
-						singletonObject = this.earlySingletonObjects.get(beanName);
+					singletonObject = this.singletonObjects.get(beanName);//再去单例池中取一次
+					if (singletonObject == null) {//单例池为空
+						singletonObject = this.earlySingletonObjects.get(beanName);//再次判断二级缓存是否存在
 						if (singletonObject == null) {
+							/*三级缓存中拿到拉姆达表达式*/
 							ObjectFactory<?> singletonFactory = this.singletonFactories.get(beanName);
 							if (singletonFactory != null) {
+//								执行拉姆达表达式，  进行AOP---->代理对象
+//												没有进行进行AOP------>原始对象
 								singletonObject = singletonFactory.getObject();
+//								存入二级缓存
 								this.earlySingletonObjects.put(beanName, singletonObject);
-								this.singletonFactories.remove(beanName);
+								this.singletonFactories.remove(beanName);//在三级缓存移除三级缓存
 							}
 						}
 					}
@@ -217,6 +225,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	public Object getSingleton(String beanName, ObjectFactory<?> singletonFactory) {
 		Assert.notNull(beanName, "Bean name must not be null");
 		synchronized (this.singletonObjects) {
+//			先看一下在单例池中能否找到
 			Object singletonObject = this.singletonObjects.get(beanName);
 			if (singletonObject == null) {
 				if (this.singletonsCurrentlyInDestruction) {
@@ -234,6 +243,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 					this.suppressedExceptions = new LinkedHashSet<>();
 				}
 				try {
+//					执行拉姆达表达式
 					singletonObject = singletonFactory.getObject();
 					newSingleton = true;
 				}
@@ -385,6 +395,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 	 */
 	public void registerDisposableBean(String beanName, DisposableBean bean) {
 		synchronized (this.disposableBeans) {
+//			在创建bean的过程中就将有销毁逻辑的bean存入disposableBeans这个集合，在容器关闭的时候才会把这个集合里面的对象拿出来，调用相对于的销毁逻辑
 			this.disposableBeans.put(beanName, bean);
 		}
 	}
@@ -521,10 +532,12 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		synchronized (this.disposableBeans) {
 			disposableBeanNames = StringUtils.toStringArray(this.disposableBeans.keySet());
 		}
+//		遍历disposableBeans这里面的每一个bean
 		for (int i = disposableBeanNames.length - 1; i >= 0; i--) {
-			destroySingleton(disposableBeanNames[i]);
+			destroySingleton(disposableBeanNames[i]);//
 		}
 
+//		容器关闭就清空这些Map
 		this.containedBeanMap.clear();
 		this.dependentBeanMap.clear();
 		this.dependenciesForBeanMap.clear();
@@ -593,6 +606,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 		// Actually destroy the bean now...
 		if (bean != null) {
 			try {
+//				执行销毁方法
 				bean.destroy();
 			}
 			catch (Throwable ex) {

@@ -6,7 +6,7 @@ import org.springframework.stereotype.Component;
 /**
  * 监听spring容器
  */
-@Component
+//@Component
 public class ZhouyuLifecycle implements SmartLifecycle {
 	private boolean isRunning=false;
 

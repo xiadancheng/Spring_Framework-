@@ -7,12 +7,38 @@
 	   https://www.springframework.org/schema/beans/spring-beans.xsd
 	   http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd http://www.springframework.org/schema/aop https://www.springframework.org/schema/aop/spring-aop.xsd"
 	   >
+<!--开启插件-->
+	<context:annotation-config/>
 
-	<context:component-scan base-package="com.zhouyu"/>
+
+<!--	<context:annotation-config/>-->
+<!--	<bean id="user" class="com.zhouyu.service.User" scope="prototype" abstract="true"/>
 
 
+	<bean id="orderService" class="com.zhouyu.service.OrderService" />-->
+<!--	<bean id="zhouyuFactoryBean" class="com.zhouyu.ZhouyuFactoryBean"/>-->
 
-	<bean id="user1" class="com.zhouyu.service.User" scope="prototype"/>
+<!--	<bean id="userService" class="com.zhouyu.service.UserService"  autowire="constructor"/>
+	<bean class="com.zhouyu.service.OrderService" id="orderService"/>-->
+<!--	<bean class="com.zhouyu.ZhouyuBeanPostProcessor" id="zhouyuBeanPostProcessor" ></bean>-->
 
-	<bean id="user2" class="com.zhouyu.service.User" parent="user1"/>
+	<!--创建bean的方法-->
+<!--	<bean id="userService" factory-bean="orderService" factory-method="createUserServiceBean"/>
+	<bean class="com.zhouyu.service.OrderService" id="orderService"/>
+
+	<bean id="userService2" class="com.zhouyu.service.OrderService"	factory-method="createUserServiceBean"/>-->
+
+	<!--<bean class="com.zhouyu.service2.ZhouyuReplace" id="zhouyuReplace"/>
+
+	<bean id="userService" class="com.zhouyu.service.UserService">
+		<replaced-method name="a" replacer="zhouyuReplace"/>
+	</bean>
+
+	<bean class="com.zhouyu.service.OrderService" id="orderService"/>
+-->
+
+	<bean class="com.zhouyu.service.UserService" id="userService" autowire="constructor" />
+
+	<bean class="com.zhouyu.service.OrderService" id="orderService"/>
 </beans>
+

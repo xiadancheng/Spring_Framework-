@@ -77,15 +77,17 @@ public class AnnotationBeanNameGenerator implements BeanNameGenerator {
 
 	@Override
 	public String generateBeanName(BeanDefinition definition, BeanDefinitionRegistry registry) {
+		//public class ScannedGenericBeanDefinition extends GenericBeanDefinition implements AnnotatedBeanDefinition {}
 		if (definition instanceof AnnotatedBeanDefinition) {
-			// 获取注解所指定的beanName
 			String beanName = determineBeanNameFromAnnotation((AnnotatedBeanDefinition) definition);
+			// 获取注解所指定的beanName,eg:@Component("userService")----->userService
 			if (StringUtils.hasText(beanName)) {
 				// Explicit bean name found.
 				return beanName;
 			}
 		}
 		// Fallback: generate a unique default bean name.
+//		没有指定beanName，则根据类名生成beanName
 		return buildDefaultBeanName(definition, registry);
 	}
 

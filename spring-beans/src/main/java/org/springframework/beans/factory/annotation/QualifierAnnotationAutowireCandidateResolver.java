@@ -145,7 +145,11 @@ public class QualifierAnnotationAutowireCandidateResolver extends GenericTypeAwa
 	public boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
 		// 先执行上层判断，如果匹配成功，在由自己匹配
 		boolean match = super.isAutowireCandidate(bdHolder, descriptor);
+		/**
+		 * 处理@Qlifile()注解
+		 */
 		if (match) {
+//			拿到方法或者属性上@Qunifile("value")的value，与对应参数类型匹配的所有bean中存在@Qunifile("value")中的value匹配
 			// descriptor.getAnnotations()拿得是属性或方法参数前的注解，拿不到方法上的注解
 			match = checkQualifiers(bdHolder, descriptor.getAnnotations());
 			if (match) {

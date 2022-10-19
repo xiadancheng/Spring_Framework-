@@ -59,6 +59,7 @@ public interface ClassMetadata {
 		return !(isInterface() || isAbstract());
 	}
 
+
 	/**
 	 * Return whether the underlying class is marked as 'final'.
 	 */

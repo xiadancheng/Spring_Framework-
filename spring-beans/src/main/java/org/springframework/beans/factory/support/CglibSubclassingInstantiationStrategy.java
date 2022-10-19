@@ -81,7 +81,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 	protected Object instantiateWithMethodInjection(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner,
 			@Nullable Constructor<?> ctor, Object... args) {
 
-		// Must generate CGLIB subclass...
+		// Must generate CGLIB subclass...产生一个代理对象
 		return new CglibSubclassCreator(bd, owner).instantiate(ctor, args);
 	}
 
@@ -113,6 +113,7 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		 * Ignored if the {@code ctor} parameter is {@code null}.
 		 * @return new instance of the dynamically generated subclass
 		 */
+		//@Lookup的代理逻辑
 		public Object instantiate(@Nullable Constructor<?> ctor, Object... args) {
 			Class<?> subclass = createEnhancedSubclass(this.beanDefinition);
 			Object instance;
@@ -132,9 +133,17 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 			// SPR-10785: set callbacks directly on the instance instead of in the
 			// enhanced class (via the Enhancer) in order to avoid memory leaks.
 			Factory factory = (Factory) instance;
+//			执行代理对象方法时就会进来
 			factory.setCallbacks(new Callback[] {NoOp.INSTANCE,
 					new LookupOverrideMethodInterceptor(this.beanDefinition, this.owner),
-					new ReplaceOverrideMethodInterceptor(this.beanDefinition, this.owner)});
+					new ReplaceOverrideMethodInterceptor(this.beanDefinition, this.owner)});//
+			/*
+	<bean class="com.zhouyu.service2.ZhouyuReplace" id="zhouyuReplace"/>
+	<bean id="userService" class="com.zhouyu.service.UserService">
+		<replaced-method name="a" replacer="zhouyuReplace"/>
+	</bean>
+			*
+			* */
 			return instance;
 		}
 
@@ -237,14 +246,15 @@ public class CglibSubclassingInstantiationStrategy extends SimpleInstantiationSt
 		@Override
 		public Object intercept(Object obj, Method method, Object[] args, MethodProxy mp) throws Throwable {
 			// Cast is safe, as CallbackFilter filters are used selectively.
+//			拿到当前正在执行+@Lookup注解信息
 			LookupOverride lo = (LookupOverride) getBeanDefinition().getMethodOverrides().getOverride(method);
 			Assert.state(lo != null, "LookupOverride not found");
 			Object[] argsToUse = (args.length > 0 ? args : null);  // if no-arg, don't insist on args at all
 			if (StringUtils.hasText(lo.getBeanName())) {
 				Object bean = (argsToUse != null ? this.owner.getBean(lo.getBeanName(), argsToUse) :
-						this.owner.getBean(lo.getBeanName()));
+						this.owner.getBean(lo.getBeanName()));//直接拿到注解信息getBean()
 				// Detect package-protected NullBean instance through equals(null) check
-				return (bean.equals(null) ? null : bean);
+				return (bean.equals(null) ? null : bean);//然后就返回了，不会执行真正的方法
 			}
 			else {
 				// Find target bean matching the (potentially generic) method return type

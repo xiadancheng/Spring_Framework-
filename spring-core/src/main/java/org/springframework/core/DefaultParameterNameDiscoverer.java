@@ -44,9 +44,9 @@ public class DefaultParameterNameDiscoverer extends PrioritizedParameterNameDisc
 		if (KotlinDetector.isKotlinReflectPresent() && !NativeDetector.inNativeImage()) {
 			addDiscoverer(new KotlinReflectionParameterNameDiscoverer());
 		}
-		// 反射（1.8+）
+		// 反射（1.8+）  标准反射参数名称发现器
 		addDiscoverer(new StandardReflectionParameterNameDiscoverer());
-		// ASM分析.class文件
+		// ASM分析.class文件  局部变量表参数名称发现器
 		addDiscoverer(new LocalVariableTableParameterNameDiscoverer());
 	}
 

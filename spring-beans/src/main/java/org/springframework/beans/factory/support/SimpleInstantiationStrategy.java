@@ -63,7 +63,8 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 	@Override
 	public Object instantiate(RootBeanDefinition bd, @Nullable String beanName, BeanFactory owner) {
 		// Don't override the class with CGLIB if no overrides.
-		// 判断当前BeanDefinition对应的beanClass中是否存在@Lookup的方法
+		// 判断当前BeanDefinition对应的beanClass中是否存在@Lookup的方法，
+		// org/springframework/beans/factory/annotation/AutowiredAnnotationBeanPostProcessor.java:280 ，如果有@Lookup的方法会在这个位置存
 		if (!bd.hasMethodOverrides()) {
 			Constructor<?> constructorToUse;
 			synchronized (bd.constructorArgumentLock) {
@@ -79,6 +80,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 									(PrivilegedExceptionAction<Constructor<?>>) clazz::getDeclaredConstructor);
 						}
 						else {
+//							直接调用无参，没有无参构造方法这里不就报错了吗
 							constructorToUse = clazz.getDeclaredConstructor();
 						}
 						bd.resolvedConstructorOrFactoryMethod = constructorToUse;
@@ -88,6 +90,7 @@ public class SimpleInstantiationStrategy implements InstantiationStrategy {
 					}
 				}
 			}
+//			constructorToUse无参构造方法
 			return BeanUtils.instantiateClass(constructorToUse);
 		}
 		else {

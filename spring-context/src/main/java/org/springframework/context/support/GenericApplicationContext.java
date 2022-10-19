@@ -105,6 +105,8 @@ public class GenericApplicationContext extends AbstractApplicationContext implem
 
 
 	/**
+	 * 1.在创建AnnotationApplicationContext对象时首先会调用父类的构造方法
+	 * 实例化一个DefaultListableBeanFactory的beanFactory
 	 * Create a new GenericApplicationContext.
 	 * @see #registerBeanDefinition
 	 * @see #refresh

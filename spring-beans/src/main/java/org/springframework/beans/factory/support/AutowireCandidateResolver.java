@@ -41,7 +41,9 @@ public interface AutowireCandidateResolver {
 	 * @return whether the bean definition qualifies as autowire candidate
 	 * @see org.springframework.beans.factory.config.BeanDefinition#isAutowireCandidate()
 	 */
+//	责任链模式
 	default boolean isAutowireCandidate(BeanDefinitionHolder bdHolder, DependencyDescriptor descriptor) {
+//		这个接口里面默认的实现，通过beanDefinition中的autowireCandidate属性判断是否能进行依赖注入
 		return bdHolder.getBeanDefinition().isAutowireCandidate();
 	}
 

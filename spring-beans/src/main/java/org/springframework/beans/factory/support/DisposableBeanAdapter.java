@@ -179,6 +179,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 
 	@Override
 	public void destroy() {
+//		分情况调用销毁方法
 		if (!CollectionUtils.isEmpty(this.beanPostProcessors)) {
 			for (DestructionAwareBeanPostProcessor processor : this.beanPostProcessors) {
 				processor.postProcessBeforeDestruction(this.bean, this.beanName);
@@ -323,9 +324,11 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 	 * @param beanDefinition the corresponding bean definition
 	 */
 	public static boolean hasDestroyMethod(Object bean, RootBeanDefinition beanDefinition) {
+//		判断有没有实现这两个接口
 		if (bean instanceof DisposableBean || bean instanceof AutoCloseable) {
 			return true;
 		}
+
 		return inferDestroyMethodIfNecessary(bean, beanDefinition) != null;
 	}
 
@@ -345,9 +348,13 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 	 */
 	@Nullable
 	private static String inferDestroyMethodIfNecessary(Object bean, RootBeanDefinition beanDefinition) {
+//		判断BeanDefinition有没有指定销毁的方法
+
 		String destroyMethodName = beanDefinition.resolvedDestroyMethodName;
 		if (destroyMethodName == null) {
-			destroyMethodName = beanDefinition.getDestroyMethodName(); //
+//		判断beanDefinition里面有没有指定销毁的方法
+			destroyMethodName = beanDefinition.getDestroyMethodName();
+//		判断destroyMethodName.equals("inferred")
 			if (AbstractBeanDefinition.INFER_METHOD.equals(destroyMethodName) ||
 					(destroyMethodName == null && bean instanceof AutoCloseable)) {
 				// Only perform destroy method inference or Closeable detection
@@ -355,10 +362,12 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 				destroyMethodName = null;
 				if (!(bean instanceof DisposableBean)) {
 					try {
+//		判断这个bean对应的类有没有close(),并将close()设置为销毁的方法
 						destroyMethodName = bean.getClass().getMethod(CLOSE_METHOD_NAME).getName();
 					}
 					catch (NoSuchMethodException ex) {
 						try {
+//		判断这个bean对应的类有没有shutdown(),并将close()设置为销毁的方法
 							destroyMethodName = bean.getClass().getMethod(SHUTDOWN_METHOD_NAME).getName();
 						}
 						catch (NoSuchMethodException ex2) {
@@ -379,6 +388,7 @@ class DisposableBeanAdapter implements DisposableBean, Runnable, Serializable {
 	 */
 	public static boolean hasApplicableProcessors(Object bean, List<DestructionAwareBeanPostProcessor> postProcessors) {
 		if (!CollectionUtils.isEmpty(postProcessors)) {
+//			判断DestructionAwareBeanPostProcessor中requiresDestruction的返回值是否为true
 			for (DestructionAwareBeanPostProcessor processor : postProcessors) {
 				if (processor.requiresDestruction(bean)) {
 					return true;

@@ -3,6 +3,8 @@ package com.zhouyu;
 
 import com.zhouyu.service.OrderService;
 import com.zhouyu.service.UserService;
+import com.zhouyu.servicescan.AppInterface;
+import com.zhouyu.servicescan.HanxinImport;
 import org.springframework.beans.factory.annotation.Autowire;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.*;
@@ -11,8 +13,7 @@ import org.springframework.scheduling.annotation.EnableAsync;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
 
-@ComponentScan(value = "com.zhouyu")
-@Configuration
+@Import(OrderService.class)
 public class AppConfig {
 
 
@@ -20,12 +21,12 @@ public class AppConfig {
 fatal: couldn't find remote ref master
 */
 /*
-	@Bean(autowire = Autowire.BY_NAME)
+	@Bean(autowire = Autowire.BY_TYPE)
 	public UserService userService(){
 		return new UserService();
 	}
-*/
 
+*/
 
 
 //	不是static的方法
