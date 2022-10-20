@@ -72,6 +72,9 @@ import org.springframework.util.ReflectionUtils;
  */
 class ConfigurationClassEnhancer {
 
+	/**
+	 * BeanMethodInterceptor()//主要的代理逻辑
+	 */
 	// The callbacks to use. Note that these callbacks must be stateless.
 	private static final Callback[] CALLBACKS = new Callback[] {
 			new BeanMethodInterceptor(),
@@ -93,6 +96,12 @@ class ConfigurationClassEnhancer {
 	 * Loads the specified class and generates a CGLIB subclass of it equipped with
 	 * container-aware callbacks capable of respecting scoping and other bean semantics.
 	 * @return the enhanced subclass
+	 */
+	/**
+	 * 根据原本类生成代理类
+	 * @param configClass
+	 * @param classLoader
+	 * @return
 	 */
 	public Class<?> enhance(Class<?> configClass, @Nullable ClassLoader classLoader) {
 		if (EnhancedConfiguration.class.isAssignableFrom(configClass)) {
@@ -314,6 +323,13 @@ class ConfigurationClassEnhancer {
 				}
 			}
 
+//			在执行的这个方法的时候，判断是不是正在创建bean的方法
+/*			@Bean
+			public UserService userService(){
+				System.out.println(orderService());  //在执行orderService()时   正在创建userService()
+				System.out.println(orderService());
+				return new UserService();
+			}*/
 			// 如果代理对象正在执行的方法就是正在创建Bean的工厂方法，那就直接执行对应的方法得到对象作为Bean
 			if (isCurrentlyInvokedFactoryMethod(beanMethod)) {
 				// The factory is calling the bean method in order to instantiate and register the bean

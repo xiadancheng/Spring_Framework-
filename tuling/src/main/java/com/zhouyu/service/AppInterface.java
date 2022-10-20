@@ -1,6 +1,5 @@
-package com.zhouyu.servicescan;
+package com.zhouyu.service;
 
-import com.zhouyu.service.UserService;
 import org.springframework.context.annotation.Bean;
 
 public interface AppInterface {

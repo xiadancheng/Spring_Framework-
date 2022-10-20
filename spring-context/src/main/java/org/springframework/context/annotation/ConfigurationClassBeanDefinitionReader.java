@@ -125,7 +125,7 @@ class ConfigurationClassBeanDefinitionReader {
 	 */
 	public void loadBeanDefinitions(Set<ConfigurationClass> configurationModel) {
 		TrackedConditionEvaluator trackedConditionEvaluator = new TrackedConditionEvaluator();
-		for (ConfigurationClass configClass : configurationModel) {
+		for (ConfigurationClass configClass : configurationModel) {//遍历每一个配置类
 			loadBeanDefinitionsForConfigurationClass(configClass, trackedConditionEvaluator);
 		}
 	}
@@ -146,12 +146,14 @@ class ConfigurationClassBeanDefinitionReader {
 			return;
 		}
 
+//		是不是被导入的,
 		if (configClass.isImported()) {
 			// 将被导入的类生成BeanDefinition并注册到Spring容器中
 			// @Component的内部类，@Import所导入的类都是被导入的类
 			registerBeanDefinitionForImportedConfigurationClass(configClass);
 		}
 
+//		将刚才存入配置类属性中的信息取出，生成beanDefinition
 		// @Bean生成BeanDefinition并注册
 		for (BeanMethod beanMethod : configClass.getBeanMethods()) {
 			loadBeanDefinitionsForBeanMethod(beanMethod);
@@ -166,6 +168,7 @@ class ConfigurationClassBeanDefinitionReader {
 
 	/**
 	 * Register the {@link Configuration} class itself as a bean definition.
+	 * 如果一个类是被导入的，那就针对该类生成beanDefinition对象
 	 */
 	private void registerBeanDefinitionForImportedConfigurationClass(ConfigurationClass configClass) {
 		AnnotationMetadata metadata = configClass.getMetadata();
@@ -228,9 +231,11 @@ class ConfigurationClassBeanDefinitionReader {
 						beanName, "Bean name derived from @Bean method '" + beanMethod.getMetadata().getMethodName() +
 						"' clashes with bean name for containing configuration class; please make those names unique!");
 			}
+//			发现已经有了直接return,就不会生成了
 			return;
 		}
 
+		//现在代码运行到@Bean生成beanDefinition的时候，发现已经存在通过@Component方式生成的beanDefinition，现在就需要覆盖
 		ConfigurationClassBeanDefinition beanDef = new ConfigurationClassBeanDefinition(configClass, metadata, beanName);
 		beanDef.setSource(this.sourceExtractor.extractSource(metadata, configClass.getResource()));
 
@@ -303,6 +308,7 @@ class ConfigurationClassBeanDefinitionReader {
 			logger.trace(String.format("Registering bean definition for @Bean method %s.%s()",
 					configClass.getMetadata().getClassName(), beanName));
 		}
+//		@Bean方式覆盖@Component
 		this.registry.registerBeanDefinition(beanName, beanDefToRegister);
 	}
 
@@ -310,12 +316,15 @@ class ConfigurationClassBeanDefinitionReader {
 		if (!this.registry.containsBeanDefinition(beanName)) {
 			return false;
 		}
+//		首先会判断这个@bean方法是否已经存在一个BeanDefinition了
 		BeanDefinition existingBeanDef = this.registry.getBeanDefinition(beanName);
 
 		// Is the existing bean definition one that was created from a configuration class?
 		// -> allow the current bean method to override, since both are at second-pass level.
 		// However, if the bean method is an overloaded case on the same configuration class,
 		// preserve the existing bean definition.
+//		判断存在的beanDefinition的类型
+//		只有@Bean方式生成的beanDifinition是这种类型
 		if (existingBeanDef instanceof ConfigurationClassBeanDefinition) {
 			ConfigurationClassBeanDefinition ccbd = (ConfigurationClassBeanDefinition) existingBeanDef;
 			if (ccbd.getMetadata().getClassName().equals(
@@ -335,6 +344,7 @@ class ConfigurationClassBeanDefinitionReader {
 
 		// A bean definition resulting from a component scan can be silently overridden
 		// by an @Bean method, as of 4.2...
+//		ScannedGenericBeanDefinition通过扫描的到的beanDefinition的类型
 		if (existingBeanDef instanceof ScannedGenericBeanDefinition) {
 			return false;
 		}

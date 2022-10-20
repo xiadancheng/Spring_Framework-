@@ -37,8 +37,17 @@
 	<bean class="com.zhouyu.service.OrderService" id="orderService"/>
 -->
 
-	<bean class="com.zhouyu.service.UserService" id="userService" autowire="constructor" />
+<!--	<bean class="com.zhouyu.service.UserService" id="userService" autowire="constructor" />
+
+	<bean class="com.zhouyu.service.OrderService" id="orderService"/>-->
+
+	<!--<bean class="com.zhouyu.AppConfig1" id="appConfig1"/>-->
+
+	<bean class="com.zhouyu.service.UserService" id="userService" autowire="byName"/>
+	<bean class="com.zhouyu.service.UserService" id="userService1" autowire="byName"/>
 
 	<bean class="com.zhouyu.service.OrderService" id="orderService"/>
+<!--	<bean class="com.zhouyu.service.OrderService" id="orderService1"/>-->
+
 </beans>
 

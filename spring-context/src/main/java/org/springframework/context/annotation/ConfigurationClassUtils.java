@@ -82,16 +82,17 @@ abstract class ConfigurationClassUtils {
 	 * @param metadataReaderFactory the current factory in use by the caller
 	 * @return whether the candidate qualifies as (any kind of) configuration class
 	 */
+	/*筛选配置类*/
 	public static boolean checkConfigurationClassCandidate(
 			BeanDefinition beanDef, MetadataReaderFactory metadataReaderFactory) {
 
-		// @Bean定义的配置类Bean是不起作用的
+		// @Bean定义的配置类Bean是不起作用的,通过@Bean方式生成的beanDifinition没有ClassName的值
 		String className = beanDef.getBeanClassName();
 		if (className == null || beanDef.getFactoryMethodName() != null) {
 			return false;
 		}
 
-		// AnnotationMetadata表示某个类的注解信息，但是并一定要加载这个类
+		// AnnotationMetadata表示某个类的注解信息，但是并不一定要加载这个类
 		AnnotationMetadata metadata;
 
 		// 如果AnnotatedBeanDefinition，则直接取AnnotationMetadata
@@ -127,6 +128,7 @@ abstract class ConfigurationClassUtils {
 			}
 		}
 
+//		判断当前这个类是否加@Configruration注解
 		Map<String, Object> config = metadata.getAnnotationAttributes(Configuration.class.getName());
 
 		// 存在@Configuration，并且proxyBeanMethods不为false(为true或为null)时，就是Full配置类
@@ -160,7 +162,7 @@ abstract class ConfigurationClassUtils {
 	 * configuration class processing; {@code false} otherwise
 	 */
 	public static boolean isConfigurationCandidate(AnnotationMetadata metadata) {
-		// Do not consider an interface or an annotation...
+		// Do not consider an interface or an annotation...判断是不是接口
 		if (metadata.isInterface()) {
 			return false;
 		}
