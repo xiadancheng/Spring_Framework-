@@ -1,5 +1,9 @@
 package com.zhouyu;
 
+import com.zhouyu.mapper.OrderMapper;
+import com.zhouyu.mapper.UserMapper;
+import com.zhouyu.mybatis.spring.HanxinFactoryBean;
+import com.zhouyu.mybatis.spring1.GouShangFactryBean;
 import com.zhouyu.service.OrderService;
 import com.zhouyu.service.PerSon;
 import com.zhouyu.service.UserService;
@@ -20,14 +24,9 @@ public class Test {
 
 		context.refresh();
 
-/*		UserService perSon = (UserService) context.getBean(PerSon.class);
-		System.out.println(perSon);*/
-	/*	ClassPathXmlApplicationContext context = new ClassPathXmlApplicationContext("spring.xml");
-		UserService userService = (UserService) context.getBean(PerSon.class);*/
-/*
-		System.out.println();*/
 
-
+		UserService userService = (UserService) context.getBean("userService");
+		userService.test();
 
 	}
 
