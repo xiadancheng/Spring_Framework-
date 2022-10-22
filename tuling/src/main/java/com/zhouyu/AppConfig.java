@@ -7,8 +7,6 @@ import com.zhouyu.mapper.OrderMapper;
 import com.zhouyu.mapper.UserMapper;
 import com.zhouyu.mybatis.spring.HanxinMapperScan;
 import com.zhouyu.mybatis.spring.ZhouyuImportBeanDefinitionRegister;
-import com.zhouyu.mybatis.spring1.GouMapperScan;
-import com.zhouyu.mybatis.spring1.GouShangImportBeanDefinitionRegister;
 import com.zhouyu.service.AppInterface;
 import com.zhouyu.service.HanxinImport;
 import com.zhouyu.service.OrderService;
