@@ -3,7 +3,9 @@ package com.zhouyu.mybatis.spring;
 import org.springframework.beans.factory.annotation.AnnotatedBeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinition;
 import org.springframework.beans.factory.config.BeanDefinitionHolder;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
 import org.springframework.beans.factory.support.BeanDefinitionRegistry;
+import org.springframework.beans.factory.support.GenericBeanDefinition;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ClassPathBeanDefinitionScanner;
 
@@ -28,9 +30,11 @@ public class ZhouyuBeanDefinitionScanner extends ClassPathBeanDefinitionScanner 
 	protected Set<BeanDefinitionHolder> doScan(String... basePackages) {
 		Set<BeanDefinitionHolder> beanDefinitionHolders = super.doScan(basePackages);
 		for (BeanDefinitionHolder beanDefinitionHolder : beanDefinitionHolders) {
-			BeanDefinition beanDefinition = beanDefinitionHolder.getBeanDefinition();
+			GenericBeanDefinition beanDefinition = (GenericBeanDefinition) beanDefinitionHolder.getBeanDefinition();
 			beanDefinition.getConstructorArgumentValues().addGenericArgumentValue(beanDefinition.getBeanClassName());
 			beanDefinition.setBeanClassName(HanxinFactoryBean.class.getName());
+//			设置通过bytype方式注入
+			beanDefinition.setAutowireMode(AbstractBeanDefinition.AUTOWIRE_BY_TYPE);
 		}
 		return beanDefinitionHolders;
 	}

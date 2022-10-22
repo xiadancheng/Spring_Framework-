@@ -19,7 +19,6 @@ public class HanxinFactoryBean implements FactoryBean {//hanxinFatoryBean---->Us
 
 	private SqlSession sqlSession;
 
-	@Autowired
 	public void setSqlSession(SqlSessionFactory sessionFactory) {
 		sessionFactory.getConfiguration().addMapper(mapperInterface);
 		this.sqlSession = sessionFactory.openSession();
@@ -38,7 +37,6 @@ public class HanxinFactoryBean implements FactoryBean {//hanxinFatoryBean---->Us
 			public Object invoke(Object proxy, Method method, Object[] args) throws Throwable {
 				System.out.println(method.getName());
 				return null;
-			}
 		});
 		return proxyInstance;*/
 
