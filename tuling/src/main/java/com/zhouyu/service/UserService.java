@@ -1,17 +1,21 @@
 package com.zhouyu.service;
 
-import com.zhouyu.mapper.MemberMapper;
-import com.zhouyu.mapper.OrderMapper;
-import com.zhouyu.mapper.UserMapper;
 import org.apache.ibatis.session.SqlSession;
+import org.aspectj.lang.annotation.Aspect;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.context.annotation.Lazy;
 import org.springframework.stereotype.Component;
 import org.springframework.transaction.annotation.Transactional;
 
 
-//@Component
-public  class UserService  implements UserServiceInterface {
+
+@Component
+public  class UserService {
+
+	@Lazy
+	private OrderService orderService;
+
 
 
 	public void test(){

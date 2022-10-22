@@ -4,7 +4,9 @@ import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
+import org.springframework.stereotype.Component;
 
+@Component
 public class ZhouyuAroundAdvice implements MethodInterceptor {
 	@Nullable
 	@Override
@@ -13,6 +15,7 @@ public class ZhouyuAroundAdvice implements MethodInterceptor {
 		Object proceed = invocation.proceed();//手动调用被代理的方法
 		System.out.println("方法执行后");
 		return proceed;
+
 
 	}
 }

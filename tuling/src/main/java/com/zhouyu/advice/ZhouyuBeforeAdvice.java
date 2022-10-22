@@ -1,12 +1,14 @@
 package com.zhouyu.advice;
 
 import org.springframework.aop.MethodBeforeAdvice;
+import org.springframework.stereotype.Component;
 
 import java.lang.reflect.Method;
 
 /**
  * 方法执行之前
  */
+//@Component
 public class ZhouyuBeforeAdvice implements MethodBeforeAdvice {
 	/**
 	 *

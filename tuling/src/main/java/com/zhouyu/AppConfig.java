@@ -1,39 +1,28 @@
 package com.zhouyu;
 
 
-import com.mysql.cj.xdevapi.SessionFactory;
-import com.zhouyu.mapper.MemberMapper;
-import com.zhouyu.mapper.OrderMapper;
-import com.zhouyu.mapper.UserMapper;
-import com.zhouyu.mybatis.spring.HanxinMapperScan;
-import com.zhouyu.mybatis.spring.ZhouyuImportBeanDefinitionRegister;
-import com.zhouyu.service.AppInterface;
-import com.zhouyu.service.HanxinImport;
-import com.zhouyu.service.OrderService;
+import com.zhouyu.advice.ZhouyuBeforeAdvice;
+import com.zhouyu.advisor.ZhouyuPointcutAdvisor;
 import com.zhouyu.service.UserService;
-import org.apache.ibatis.io.Resources;
-import org.apache.ibatis.session.SqlSession;
 import org.apache.ibatis.session.SqlSessionFactory;
-import org.apache.ibatis.session.SqlSessionFactoryBuilder;
 import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.SqlSessionTemplate;
-import org.mybatis.spring.annotation.MapperScan;
 import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
+import org.springframework.aop.framework.ProxyFactoryBean;
+import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
+import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
+import org.springframework.aop.support.DefaultPointcutAdvisor;
+import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.*;
-import org.springframework.core.io.Resource;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
 import org.springframework.transaction.PlatformTransactionManager;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
-import org.springframework.transaction.event.TransactionalEventListener;
 
 
 import javax.sql.DataSource;
-import java.io.IOException;
-import java.io.InputStream;
 
 
 //@Import({HanxinImport.class})
@@ -49,13 +38,60 @@ import java.io.InputStream;
 //@HanxinMapperScan("com.zhouyu.mapper")
 //@GouMapperScan("com.zhouyu.mapper")
 //@MapperScan("com.zhouyu.mapper")
-@EnableTransactionManagement
+//@EnableTransactionManagement
+@Import(AnnotationAwareAspectJAutoProxyCreator.class)//只会找advie类型的bean
+/*@EnableAspectJAutoProxy*/
 public class AppConfig{
-	@Bean
+	/*@Bean
 	public MapperScannerConfigurer mapperScannerConfigurer(){
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
 		mapperScannerConfigurer.setBasePackage("com.zhouyu.mapper");
 		return mapperScannerConfigurer;
+	}*/
+
+/*	@Bean
+	public ProxyFactoryBean userService(){
+		UserService userService = new UserService();
+		ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
+//		proxyFactoryBean.addAdvice(new ZhouyuBeforeAdvice());
+		proxyFactoryBean.addAdvisor(new ZhouyuPointcutAdvisor());
+		proxyFactoryBean.setTarget(userService);
+		return proxyFactoryBean;
+	}*/
+
+	/**
+	 * Bean名称自动代理创建者
+	 * @return
+	 */
+	@Bean
+	public BeanNameAutoProxyCreator beanNameAutoProxyCreator(){
+		BeanNameAutoProxyCreator beanNameAutoProxyCreator = new BeanNameAutoProxyCreator();
+		beanNameAutoProxyCreator.setBeanNames("userSe*");//那些bean的名字符合这个表达式
+		beanNameAutoProxyCreator.setInterceptorNames("zhouyuAroundAdvice");//这些bean的代理逻辑
+		beanNameAutoProxyCreator.setProxyTargetClass(true);
+		return beanNameAutoProxyCreator;
+	}
+
+	@Bean
+	public DefaultPointcutAdvisor defaultPointcutAdvisor(){
+		NameMatchMethodPointcut pointcut = new NameMatchMethodPointcut();
+		pointcut.addMethodName("test");//代表某一个bean里面有test方法，那么就会进行动态代理
+
+		DefaultPointcutAdvisor defaultPointcutAdvisor = new DefaultPointcutAdvisor();
+		defaultPointcutAdvisor.setPointcut(pointcut);
+		defaultPointcutAdvisor.setAdvice(new ZhouyuBeforeAdvice());
+		return 	defaultPointcutAdvisor;
+	}
+
+	/**
+	 * 针对正在创建的bean，初始化后的方法里面找spring容器里面有哪些时Advisor的所有bean，拿出pointcut.addMethodName("test");与当前正在创建的bean里面的方法是否匹配
+	 * 如果有代表正在创建这个bean需要动态代理
+	 * @return
+	 */
+	@Bean
+	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator(){
+		DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
+		return defaultAdvisorAutoProxyCreator;
 	}
 
 
