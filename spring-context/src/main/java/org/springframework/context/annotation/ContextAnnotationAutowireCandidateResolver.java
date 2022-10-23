@@ -105,14 +105,14 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 			}
 
 			/**
-			 * 真正使用这个代理对象的时候才会根据这个字段信息，找到真正的bean对象才会取执行对应的方法
+			 * 真正在执行这个代理对象的方法的时候，才会通过属性名和属性类型找到真正的被代理对象返回，拿到被代理对象了才执行被代理对象对应的方法
 			 * @return
 			 */
 			@Override
 			public Object getTarget() {
 				Set<String> autowiredBeanNames = (beanName != null ? new LinkedHashSet<>(1) : null);
 //				添加了@Lazy会返回一个代理对象，当使用到这个参数的时候才会调用到这个方法找到参数对应的bean
-				Object target = dlbf.doResolveDependency(descriptor, beanName, autowiredBeanNames, null);
+				Object target = dlbf.doResolveDependency(descriptor, beanName, autowiredBeanNames, null);//根据属性找到bean对象
 				if (target == null) {
 					Class<?> type = getTargetClass();
 					if (Map.class == type) {
@@ -134,7 +134,7 @@ public class ContextAnnotationAutowireCandidateResolver extends QualifierAnnotat
 						}
 					}
 				}
-				return target;
+				return target;//返回真正被代理的对象
 			}
 			@Override
 			public void releaseTarget(Object target) {

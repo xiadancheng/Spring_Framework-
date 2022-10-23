@@ -52,14 +52,12 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 	@Override
 	public AopProxy createAopProxy(AdvisedSupport config) throws AopConfigException {
 		// 如果ProxyFactory的isOptimize为true，Spring认为cglib比jdk动态代理要快
-		// 或者isProxyTargetClass为true，
+		//或者isProxyTargetClass默认为false，可以设置，true:即使
 		// 或者被代理对象没有实现接口，
 		// 或者只实现了SpringProxy这个接口
 		// 那么则利用Cglib进行动态代理，但如果被代理类是接口，或者被代理类已经是进行过JDK动态代理而生成的代理类了则只能进行JDK动态代理
 
 		// 其他情况都会进行JDK动态代理，比如被代理类实现了除SpringProxy接口之外的其他接口
-
-		// 是不是在GraalVM虚拟机上运行
 		if (!NativeDetector.inNativeImage() &&
 				(config.isOptimize() || config.isProxyTargetClass() || hasNoUserSuppliedProxyInterfaces(config))) {
 
@@ -71,9 +69,11 @@ public class DefaultAopProxyFactory implements AopProxyFactory, Serializable {
 			if (targetClass.isInterface() || Proxy.isProxyClass(targetClass)) {
 				return new JdkDynamicAopProxy(config);
 			}
+//			返回cjlib返回的动态代理对象
 			return new ObjenesisCglibAopProxy(config);
 		}
 		else {
+//			返回jdk动态代理对象
 			return new JdkDynamicAopProxy(config);
 		}
 	}

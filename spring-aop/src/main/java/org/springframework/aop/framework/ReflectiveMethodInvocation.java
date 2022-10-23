@@ -166,7 +166,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			return invokeJoinpoint();
 		}
 
-		// currentInterceptorIndex初始值为-1
+		// currentInterceptorIndex初始值为-1  取出第一个
 		Object interceptorOrInterceptionAdvice =
 				this.interceptorsAndDynamicMethodMatchers.get(++this.currentInterceptorIndex);
 
@@ -177,6 +177,7 @@ public class ReflectiveMethodInvocation implements ProxyMethodInvocation, Clonea
 			// been evaluated and found to match.
 			InterceptorAndDynamicMethodMatcher dm =
 					(InterceptorAndDynamicMethodMatcher) interceptorOrInterceptionAdvice;
+//			被代理类
 			Class<?> targetClass = (this.targetClass != null ? this.targetClass : this.method.getDeclaringClass());
 			// 动态匹配，根据方法参数匹配
 			if (dm.methodMatcher.matches(this.method, targetClass, this.arguments)) {

@@ -192,7 +192,7 @@ class CglibAopProxy implements AopProxy, Serializable {
 				}
 			}
 
-			// 被代理类，代理类的父类
+			// 被代理类是代理类的父类   代理对象exthonds proxySuperClass
 			enhancer.setSuperclass(proxySuperClass);
 			// 代理类额外要实现的接口
 			enhancer.setInterfaces(AopProxyUtils.completeProxiedInterfaces(this.advised));

@@ -1,7 +1,8 @@
 package com.zhouyu.service;
 
 public interface UserServiceInterface {
+
 	public void test();
 
-	public void a();
+//	public void xxxxx();
 }

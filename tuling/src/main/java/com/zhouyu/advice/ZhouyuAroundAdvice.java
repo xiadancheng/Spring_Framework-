@@ -8,6 +8,9 @@ import org.springframework.stereotype.Component;
 
 @Component
 public class ZhouyuAroundAdvice implements MethodInterceptor {
+
+	/*MethodInterceptor*/
+
 	@Nullable
 	@Override
 	public Object invoke(@NotNull MethodInvocation invocation) throws Throwable {
@@ -15,7 +18,5 @@ public class ZhouyuAroundAdvice implements MethodInterceptor {
 		Object proceed = invocation.proceed();//手动调用被代理的方法
 		System.out.println("方法执行后");
 		return proceed;
-
-
 	}
 }

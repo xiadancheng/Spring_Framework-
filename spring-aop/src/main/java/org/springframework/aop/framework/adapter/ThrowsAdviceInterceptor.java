@@ -80,6 +80,7 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 		for (Method method : methods) {
 			if (method.getName().equals(AFTER_THROWING) &&
 					(method.getParameterCount() == 1 || method.getParameterCount() == 4)) {
+//				拿到最后一个参数类型拿到，某种一场的类型
 				Class<?> throwableParam = method.getParameterTypes()[method.getParameterCount() - 1];
 				if (Throwable.class.isAssignableFrom(throwableParam)) {
 					// An exception handler to register...
@@ -113,8 +114,10 @@ public class ThrowsAdviceInterceptor implements MethodInterceptor, AfterAdvice {
 			return mi.proceed();
 		}
 		catch (Throwable ex) {
+//			匹配异常
 			Method handlerMethod = getExceptionHandler(ex);
 			if (handlerMethod != null) {
+//				抛异常
 				invokeHandlerMethod(mi, ex, handlerMethod);
 			}
 			throw ex;

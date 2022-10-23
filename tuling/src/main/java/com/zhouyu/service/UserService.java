@@ -2,6 +2,7 @@ package com.zhouyu.service;
 
 import org.apache.ibatis.session.SqlSession;
 import org.aspectj.lang.annotation.Aspect;
+import org.springframework.aop.framework.AopContext;
 import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Lazy;
@@ -10,21 +11,14 @@ import org.springframework.transaction.annotation.Transactional;
 
 
 
-@Component
-public  class UserService {
+//@Component
+public  class UserService  implements UserServiceInterface{
 
-	@Lazy
-	private OrderService orderService;
-
-
-
+	@Override
 	public void test(){
+//		UserService o = (UserService) AopContext.currentProxy();//当proxyFactory.setExposeProxy(true);时可以通过这种方式拿到代理对象
 		System.out.println("test");
-	}
-
-	public void a(){
-		System.out.println("a");
-//		throw  new NullPointerException();
+//		throw new NullPointerException();
 	}
 }
 
