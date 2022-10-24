@@ -136,7 +136,8 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 	}
 
 	/**
-	 * Lazily instantiate advice if necessary.
+	 * Lazily instantiate advice if necessary.在AOP过程就会将  bean----->符合的advisor封装成InstantiationModelAwarePointcutAdvisor，
+	 * 在真正调用切面逻辑的时候不就来这里了
 	 */
 	@Override
 	public synchronized Advice getAdvice() {
@@ -147,6 +148,7 @@ final class InstantiationModelAwarePointcutAdvisorImpl
 	}
 
 	private Advice instantiateAdvice(AspectJExpressionPointcut pointcut) {
+
 		Advice advice = this.aspectJAdvisorFactory.getAdvice(this.aspectJAdviceMethod, pointcut,
 				this.aspectInstanceFactory, this.declarationOrder, this.aspectName);
 		return (advice != null ? advice : EMPTY_ADVICE);

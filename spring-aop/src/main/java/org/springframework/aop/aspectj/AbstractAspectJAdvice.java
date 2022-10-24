@@ -636,7 +636,7 @@ public abstract class AbstractAspectJAdvice implements Advice, AspectJPrecedence
 			// 拿到Advice中所记录的LazySingletonAspectInstanceFactoryDecorator对象从而获得切面Bean实例，再执行对应方法
 			// 一个代理对象可能会对应多个Advisor，也就是Advice，而这些Advice在生成时都是用的同一个LazySingletonAspectInstanceFactoryDecorator
 			// 不过一个类如果和某个perthis、pertarget的切面匹配的话，在生成的代理对象中还会有一个额外的Advisor，这个Advisor会负责
-			return this.aspectJAdviceMethod.invoke(this.aspectInstanceFactory.getAspectInstance(), actualArgs);
+			return this.aspectJAdviceMethod.invoke(this.aspectInstanceFactory.getAspectInstance(), actualArgs);//执行@before修饰的方法
 		}
 		catch (IllegalArgumentException ex) {
 			throw new AopInvocationException("Mismatch on arguments to advice method [" +

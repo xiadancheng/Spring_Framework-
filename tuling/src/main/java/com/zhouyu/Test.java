@@ -23,28 +23,31 @@ import java.io.IOException;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
+/*
 
-/*		UserService target = new UserService();
+		UserService target = new UserService();
 
 		ProxyFactory proxyFactory = new ProxyFactory();
 		proxyFactory.setTarget(target);
 //		proxyFactory.setProxyTargetClass(true);
-//		proxyFactory.setInterfaces(UserService.class);
+		proxyFactory.setInterfaces(UserServiceInterface.class);
 		proxyFactory.addAdvice(new ZhouyuBeforeAdvice());
 		proxyFactory.addAdvice(new ZhouyuAroundAdvice());
 		proxyFactory.addAdvisor(new ZhouyuPointcutAdvisor());
-		proxyFactory.setProxyTargetClass(true);
+//		proxyFactory.setProxyTargetClass(true);
 
 
 
 
 		UserServiceInterface userService = (UserServiceInterface) proxyFactory.getProxy();//获取代理对象
 
-		userService.test();//advice链*/
+		userService.test();//advice链
+*/
 
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		Object userService = context.getBean("userService");
-		System.out.println(userService);
+		UserService userService = (UserService) context.getBean("userService");
+		userService.test();
+
 	}
 
 	}

@@ -94,11 +94,12 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 	 * @see #extendAdvisors
 	 */
 	protected List<Advisor> findEligibleAdvisors(Class<?> beanClass, String beanName) {
-		// 找到所有的Advisor
+		// 找到所有的Advisor,bean和@Aspect方式
 		List<Advisor> candidateAdvisors = findCandidateAdvisors();
 		// 进行筛选
 		List<Advisor> eligibleAdvisors = findAdvisorsThatCanApply(candidateAdvisors, beanClass, beanName);
 
+//		扩展
 		extendAdvisors(eligibleAdvisors);
 
 		// 对Advisor进行排序，按Ordered接口、@Order注解进行排序
@@ -131,6 +132,7 @@ public abstract class AbstractAdvisorAutoProxyCreator extends AbstractAutoProxyC
 
 		ProxyCreationContext.setCurrentProxiedBeanName(beanName);
 		try {
+//			筛选
 			return AopUtils.findAdvisorsThatCanApply(candidateAdvisors, beanClass);
 		}
 		finally {

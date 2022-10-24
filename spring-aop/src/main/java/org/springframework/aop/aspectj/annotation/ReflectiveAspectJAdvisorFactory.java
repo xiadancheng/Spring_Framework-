@@ -91,6 +91,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 					return (ann != null ? ann.getAnnotation() : null);
 				});
 		Comparator<Method> methodNameComparator = new ConvertingComparator<>(Method::getName);
+//		2.根据自负床比较排序
 		adviceMethodComparator = adviceKindComparator.thenComparing(methodNameComparator);
 	}
 
@@ -122,8 +123,8 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 	@Override
 	public List<Advisor> getAdvisors(MetadataAwareAspectInstanceFactory aspectInstanceFactory) {
-		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
-		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();
+		Class<?> aspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();//拿出切面bean的类型
+		String aspectName = aspectInstanceFactory.getAspectMetadata().getAspectName();//切面beanName
 		validate(aspectClass);
 
 		// We need to wrap the MetadataAwareAspectInstanceFactory with a decorator
@@ -147,6 +148,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 			// discovered via reflection in order to support reliable advice ordering across JVM launches.
 			// Specifically, a value of 0 aligns with the default value used in
 			// AspectJPrecedenceComparator.getAspectDeclarationOrder(Advisor).
+//			根据切面的method封装成advisor
 			Advisor advisor = getAdvisor(method, lazySingletonAspectInstanceFactory, 0, aspectName);
 			if (advisor != null) {
 				advisors.add(advisor);
@@ -181,6 +183,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 		ReflectionUtils.doWithMethods(aspectClass, methods::add, adviceMethodFilter);
 		// 对方法进行排序，按注解和方法名字进行排序
 		if (methods.size() > 1) {
+//			排序
 			methods.sort(adviceMethodComparator);
 		}
 		return methods;
@@ -217,15 +220,22 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 
 		validate(aspectInstanceFactory.getAspectMetadata().getAspectClass());
 
-		// 拿到当前方法所对应的Pointcut对象，但是注意：如果当前方法上是这么写的@After("pointcut()")，那么此时得到的Pointcut并没有去解析pointcut()得到对应的表达式
+		// 拿到当前方法所对应的Pointcut对象，但是注意：如果当前方法上是这么写的@After("pointcut()")，
+		// 那么此时得到的Pointcut并没有去解析pointcut()得到对应的表达式
 		AspectJExpressionPointcut expressionPointcut = getPointcut(
 				candidateAdviceMethod, aspectInstanceFactory.getAspectMetadata().getAspectClass());
 		if (expressionPointcut == null) {
 			return null;
 		}
 
-		// expressionPointcut是pointcut
-		// candidateAdviceMethod承载了advice
+/**
+ *expressionPointcut:"execution(public void com.zhouyu.service.UserService.test())"
+ * candidateAdviceMethod:UserServiceAspectByTest
+ * this:beanFactory
+ * aspectInstanceFactory:zhouyuAspect----->bean
+ * declarationOrderInAspect:0
+ *aspectName:zhouyuAspect----->beanName
+ */
 		return new InstantiationModelAwarePointcutAdvisorImpl(expressionPointcut, candidateAdviceMethod,
 				this, aspectInstanceFactory, declarationOrderInAspect, aspectName);
 	}
@@ -255,7 +265,7 @@ public class ReflectiveAspectJAdvisorFactory extends AbstractAspectJAdvisorFacto
 	public Advice getAdvice(Method candidateAdviceMethod, AspectJExpressionPointcut expressionPointcut,
 			MetadataAwareAspectInstanceFactory aspectInstanceFactory, int declarationOrder, String aspectName) {
 
-		Class<?> candidateAspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();
+		Class<?> candidateAspectClass = aspectInstanceFactory.getAspectMetadata().getAspectClass();//切面类
 		validate(candidateAspectClass);
 
 		// 拿到当前candidateAdviceMethod方法上的注解信息

@@ -40,7 +40,7 @@ import javax.sql.DataSource;
 //@MapperScan("com.zhouyu.mapper")
 //@EnableTransactionManagement
 //@Import(AnnotationAwareAspectJAutoProxyCreator.class)//只会找advie类型的bean
-//@EnableAspectJAutoProxy(proxyTargetClass = true)
+@EnableAspectJAutoProxy()
 public class AppConfig{
 /*	@Bean
 	public MapperScannerConfigurer mapperScannerConfigurer(){
@@ -49,7 +49,7 @@ public class AppConfig{
 		return mapperScannerConfigurer;
 	}*/
 
-	@Bean
+	/*@Bean
 	public ProxyFactoryBean userService(){
 		UserService userService = new UserService();
 		ProxyFactoryBean proxyFactoryBean = new ProxyFactoryBean();
@@ -58,7 +58,7 @@ public class AppConfig{
 		proxyFactoryBean.setTarget(userService);
 
 		return proxyFactoryBean;
-	}
+	}*/
 
 	/**
 	 * Bean名称自动代理创建者
@@ -89,11 +89,13 @@ public class AppConfig{
 	 * 如果有代表正在创建这个bean需要动态代理
 	 * @return
 	 */
+/*
 	@Bean
 	public DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator(){
 		DefaultAdvisorAutoProxyCreator defaultAdvisorAutoProxyCreator = new DefaultAdvisorAutoProxyCreator();
 		return defaultAdvisorAutoProxyCreator;
 	}
+*/
 
 
 /*
@@ -116,13 +118,13 @@ public class AppConfig{
 	}*/
 
 
-	@Bean
+/*	@Bean
 	public PlatformTransactionManager transactionManager(){
 		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
 		transactionManager.setDataSource(dataSource());
 		return transactionManager;
-	}
-
+	}*/
+/*
 	@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -139,7 +141,7 @@ public class AppConfig{
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
 		return sqlSessionFactoryBean.getObject();
-	}
+	}*/
 
 
 
