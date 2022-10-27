@@ -27,6 +27,10 @@ import org.springframework.lang.Nullable;
  * @author Juergen Hoeller
  * @since 2.0.7
  */
+
+/**
+ * 会和获取spring容器中的advisor对象，但是不会解析aspectJ
+ */
 @SuppressWarnings("serial")
 public class InfrastructureAdvisorAutoProxyCreator extends AbstractAdvisorAutoProxyCreator {
 

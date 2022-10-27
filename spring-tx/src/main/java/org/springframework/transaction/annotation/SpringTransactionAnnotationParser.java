@@ -45,6 +45,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 
 	@Override
 	public boolean isCandidateClass(Class<?> targetClass) {
+//		判断当前类是否有@Transactional注解
 		return AnnotationUtils.isCandidateClass(targetClass, Transactional.class);
 	}
 
@@ -65,6 +66,7 @@ public class SpringTransactionAnnotationParser implements TransactionAnnotationP
 		return parseTransactionAnnotation(AnnotationUtils.getAnnotationAttributes(ann, false, false));
 	}
 
+//	解析@Transsaction注解信息封装成RuleBasedTranctionAttribute对象
 	protected TransactionAttribute parseTransactionAnnotation(AnnotationAttributes attributes) {
 		RuleBasedTransactionAttribute rbta = new RuleBasedTransactionAttribute();
 

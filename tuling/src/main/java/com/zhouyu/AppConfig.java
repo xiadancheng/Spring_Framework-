@@ -14,6 +14,7 @@ import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreato
 import org.springframework.aop.support.DefaultPointcutAdvisor;
 import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.*;
+import org.springframework.jdbc.core.JdbcTemplate;
 import org.springframework.jdbc.datasource.DataSourceTransactionManager;
 
 
@@ -40,7 +41,9 @@ import javax.sql.DataSource;
 //@MapperScan("com.zhouyu.mapper")
 //@EnableTransactionManagement
 //@Import(AnnotationAwareAspectJAutoProxyCreator.class)//只会找advie类型的bean
-@EnableAspectJAutoProxy()
+//@EnableAspectJAutoProxy()
+@Configuration
+@EnableTransactionManagement
 public class AppConfig{
 /*	@Bean
 	public MapperScannerConfigurer mapperScannerConfigurer(){
@@ -117,14 +120,18 @@ public class AppConfig{
 		return sqlSessionTemplate;
 	}*/
 
+	/*
+	拿到事务管理器
+	final TransactionManager tm = determineTransactionManager(txAttr);
+	* */
 
-/*	@Bean
+	@Bean
 	public PlatformTransactionManager transactionManager(){
 		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
 		transactionManager.setDataSource(dataSource());
+//		transactionManager.setGlobalRollbackOnParticipationFailure(false);//true:部分失败，全局回滚，false:部分失败，全局不会滚
 		return transactionManager;
-	}*/
-/*
+	}
 	@Bean
 	public DataSource dataSource(){
 		DriverManagerDataSource dataSource = new DriverManagerDataSource();
@@ -134,14 +141,19 @@ public class AppConfig{
 		return  dataSource;
 	}
 
-
-
 	@Bean
 	public SqlSessionFactory sqlSessionFactory() throws Exception {
 		SqlSessionFactoryBean sqlSessionFactoryBean = new SqlSessionFactoryBean();
 		sqlSessionFactoryBean.setDataSource(dataSource());
 		return sqlSessionFactoryBean.getObject();
-	}*/
+	}
+
+	@Bean
+	public JdbcTemplate jdbcTemplate(){
+		JdbcTemplate jdbcTemplate = new JdbcTemplate();
+		jdbcTemplate.setDataSource(dataSource());
+		return jdbcTemplate;
+	}
 
 
 

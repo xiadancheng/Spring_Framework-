@@ -54,6 +54,7 @@ public class AutoProxyRegistrar implements ImportBeanDefinitionRegistrar {
 	 * annotation it finds -- as long as it exposes the right {@code mode} and
 	 * {@code proxyTargetClass} attributes, the APC can be registered and configured all
 	 * the same.
+	 *
 	 */
 	@Override
 	public void registerBeanDefinitions(AnnotationMetadata importingClassMetadata, BeanDefinitionRegistry registry) {

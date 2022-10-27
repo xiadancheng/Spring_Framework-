@@ -202,7 +202,7 @@ public abstract class TransactionSynchronizationManager {
 	 */
 	public static Object unbindResource(Object key) throws IllegalStateException {
 		Object actualKey = TransactionSynchronizationUtils.unwrapResourceIfNecessary(key);
-		Object value = doUnbindResource(actualKey);
+		Object value = doUnbindResource(actualKey);//根据key:dataSources，移除ThreadLocal Map<>中当前事务并返回
 		if (value == null) {
 			throw new IllegalStateException("No value for key [" + actualKey + "] bound to thread");
 		}
@@ -250,9 +250,10 @@ public abstract class TransactionSynchronizationManager {
 	 * Return if transaction synchronization is active for the current thread.
 	 * Can be called before register to avoid unnecessary instance creation.
 	 * @see #registerSynchronization
+	 *
 	 */
 	public static boolean isSynchronizationActive() {
-		return (synchronizations.get() != null);
+		return (synchronizations.get() != null);//true:开启过事务   false:没有开启过事务
 	}
 
 	/**

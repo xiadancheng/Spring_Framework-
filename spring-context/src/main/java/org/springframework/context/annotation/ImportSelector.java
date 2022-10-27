@@ -62,15 +62,15 @@ public interface ImportSelector {
 
 	/**
 	 * Select and return the names of which class(es) should be imported based on
-	 * the {@link AnnotationMetadata} of the importing @{@link Configuration} class.
+	 * the {@link AnnotationMetadata} of the IMPORTING @{@link Configuration} class.
 	 * @return the class names, or an empty array if none
 	 */
 	String[] selectImports(AnnotationMetadata importingClassMetadata);
 
 	/**
-	 * Return a predicate for excluding classes from the import candidates, to be
+	 * return a predicate for excluding classes from the import candidates, to be
 	 * transitively applied to all classes found through this selector's imports.
-	 * <p>If this predicate returns {@code true} for a given fully-qualified
+	 * <p>if this predicate returns {@code true} for a given fully-qualified
 	 * class name, said class will not be considered as an imported configuration
 	 * class, bypassing class file loading as well as metadata introspection.
 	 * @return the filter predicate for fully-qualified candidate class names

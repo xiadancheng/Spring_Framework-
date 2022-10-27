@@ -43,11 +43,13 @@ public class TransactionManagementConfigurationSelector extends AdviceModeImport
 	 * and {@code ASPECTJ} values of {@link EnableTransactionManagement#mode()},
 	 * respectively.
 	 */
+
 	@Override
 	protected String[] selectImports(AdviceMode adviceMode) {
+//		开启事务实际想beanFactory中增加了这两个类
 		switch (adviceMode) {
 			case PROXY:
-				// 默认是PROXY
+				// 默认是PROXY,开启AOP
 				return new String[] {AutoProxyRegistrar.class.getName(),
 						ProxyTransactionManagementConfiguration.class.getName()};
 			case ASPECTJ:

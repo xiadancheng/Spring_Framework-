@@ -91,6 +91,7 @@ public abstract class TransactionSynchronizationUtils {
 	 * @param readOnly whether the transaction is defined as read-only transaction
 	 * @throws RuntimeException if thrown by a {@code beforeCommit} callback
 	 * @see TransactionSynchronization#beforeCommit(boolean)
+	 * 提交前的方法
 	 */
 	public static void triggerBeforeCommit(boolean readOnly) {
 		for (TransactionSynchronization synchronization : TransactionSynchronizationManager.getSynchronizations()) {

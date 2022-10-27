@@ -187,6 +187,7 @@ public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements
 //		如果单例池中为空，且发现该类正在创建bean
 		if (singletonObject == null && isSingletonCurrentlyInCreation(beanName)) {//解决循环依赖
 //		2.到二级缓存取
+
 			singletonObject = this.earlySingletonObjects.get(beanName);
 //		3.二级缓存中为空，且支持循环依赖
 			if (singletonObject == null && allowEarlyReference) {//加个锁
