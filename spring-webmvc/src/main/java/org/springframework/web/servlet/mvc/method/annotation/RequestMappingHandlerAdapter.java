@@ -787,12 +787,12 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			HttpServletResponse response, HandlerMethod handlerMethod) throws Exception {
 
 		ModelAndView mav;
-		// 检查当前请求的method是否为支持的method(默认Null,可通过继承AbstractController设置supportedMethods)
+		//1. 检查当前请求的method是否为支持的method(默认Null,可通过继承AbstractController设置supportedMethods)
 		// 检查当前请求是否必须session  (默认false,可通过继承AbstractController设置requireSession)
 		checkRequest(request);
 
 		/**
-		 * 判断当前是否需要支持在同一个session中只能线性地处理请求
+		 * 2.判断当前是否需要支持在同一个session中只能线性地处理请求
 		 * 因为锁是通过 synchronized 是 JVM 进程级，所以在分布式环境下，
 		 * 无法达到同步相同 Session 的功能。默认情况下，synchronizeOnSession 为 false
 		 */
@@ -881,11 +881,11 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			// 封装handlerMethod，会在调用前解析参数、调用后对返回值进行处理
 			ServletInvocableHandlerMethod invocableMethod = createInvocableHandlerMethod(handlerMethod);
 			if (this.argumentResolvers != null) {
-				// 让invocableMethod拥有参数解析能力
+				// 让invocableMethod拥有参数解析能力，参数解析器
 				invocableMethod.setHandlerMethodArgumentResolvers(this.argumentResolvers);
 			}
 			if (this.returnValueHandlers != null) {
-				// 让invocableMethod拥有返回值处理能力
+				// 让invocableMethod拥有返回值处理能力，返回值解析器
 				invocableMethod.setHandlerMethodReturnValueHandlers(this.returnValueHandlers);
 			}
 			// 让invocableMethod拥有InitBinder解析能力
@@ -896,7 +896,7 @@ public class RequestMappingHandlerAdapter extends AbstractHandlerMethodAdapter
 			ModelAndViewContainer mavContainer = new ModelAndViewContainer();
 			// 将request的Attribute复制一份到ModelMap
 			mavContainer.addAllAttributes(RequestContextUtils.getInputFlashMap(request));
-			// *调用我们标注了@ModelAttribute的方法,主要是为我们的目标方法预加载
+			// *在调用目标方法前先调用我们标注了@ModelAttribute的方法,主要是为我们的目标方法预加载
 			modelFactory.initModel(webRequest, mavContainer, invocableMethod);
 			// 重定向的时候，忽略model中的数据 默认false
 			mavContainer.setIgnoreDefaultModelOnRedirect(this.ignoreDefaultModelOnRedirect);

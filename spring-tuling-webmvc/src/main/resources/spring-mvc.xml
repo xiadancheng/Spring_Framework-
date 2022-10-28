@@ -16,21 +16,26 @@
         <property name="suffix" value=".jsp"></property>
     </bean>
 
+<!--
 
-   <!-- <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
+处理器映射器，多个处理器映射器执行顺序可以通过@Order控制
+&lt;!&ndash;	根据请求地址映射&ndash;&gt;
+   <bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping"/>
 
+    &lt;!&ndash;根据bean的名字url进行映射  @Component("/httpRequestHandler")   请求就会根据beanName:httpRequestHandler进行映射&ndash;&gt;
+    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 
     <bean class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping" >
         <property name="mappings">
             <props>
+&lt;!&ndash;            给bean:simpleController配置映射地址/simpleController&ndash;&gt;
                 <prop key="/simpleController">simpleController</prop>
             </props>
         </property>
     </bean>
 
-
-    <bean class="org.springframework.web.servlet.handler.BeanNameUrlHandlerMapping"/>
 -->
+
 
     <!--<bean class="org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerAdapter">
         <property name="messageConverters">

@@ -315,7 +315,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	@Nullable
 	private ThemeResolver themeResolver;
 
-	/** List of HandlerMappings used by this servlet. */
+	/** List of HandlerMappings used by this servlet. key:	请求路径  value:对应的handlerMapping*/
 	@Nullable
 	private List<HandlerMapping> handlerMappings;
 
@@ -1030,19 +1030,19 @@ public class DispatcherServlet extends FrameworkServlet {
 		try {
 			ModelAndView mv = null;
 			Exception dispatchException = null;
-
 			try {
+//				1.验证是否是上传的请求
 				processedRequest = checkMultipart(request);
 				multipartRequestParsed = (processedRequest != request);
 
-				// 进行映射
+				// 1.进行映射
 				mappedHandler = getHandler(processedRequest);
 				if (mappedHandler == null) {
 					noHandlerFound(processedRequest, response);
 					return;
 				}
 
-				// 找到最合适的HandlerAdapter
+				// 2.找到最合适的HandlerAdapter
 				HandlerAdapter ha = getHandlerAdapter(mappedHandler.getHandler());
 
 				// Process last-modified header, if supported by the handler.  HTTP缓存相关
@@ -1054,13 +1054,13 @@ public class DispatcherServlet extends FrameworkServlet {
 						return;
 					}
 				}
-				// 前置拦截器
+				// 3.执行前置拦截器方法
 				if (!mappedHandler.applyPreHandle(processedRequest, response)) {
 					// 返回false就不进行后续处理了
 					return;
 				}
 
-				// Actually invoke the handler.
+				// Actually invoke the handler.执行handler方法,解析参数
 				mv = ha.handle(processedRequest, response, mappedHandler.getHandler());
 
 				if (asyncManager.isConcurrentHandlingStarted()) {
@@ -1069,7 +1069,7 @@ public class DispatcherServlet extends FrameworkServlet {
 				// 如果mv有  视图没有，给你设置默认视图
 				applyDefaultViewName(processedRequest, mv);
 				//后置拦截器
-				mappedHandler.applyPostHandle(processedRequest, response, mv);
+			mappedHandler.applyPostHandle(processedRequest, response, mv);
 			}
 			catch (Exception ex) {
 				dispatchException = ex;
@@ -1263,6 +1263,7 @@ public class DispatcherServlet extends FrameworkServlet {
 			 * 测试发现： 不同的HandlerMapping可以有相同path, 谁先解析到就用哪个
 			 * */
 			for (HandlerMapping mapping : this.handlerMappings) {
+//				根据请求地址，找到对应的HandlerMapping
 				HandlerExecutionChain handler = mapping.getHandler(request);
 				if (handler != null) {
 					return handler;

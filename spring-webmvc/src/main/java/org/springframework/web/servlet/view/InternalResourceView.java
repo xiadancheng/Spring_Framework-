@@ -144,7 +144,7 @@ public class InternalResourceView extends AbstractUrlBasedView {
 		// Expose helpers as request attributes, if any.  设置国际化资源
 		exposeHelpers(request);
 
-		// Determine the path for the request dispatcher.  防止死循环请求
+		// Determine the path for the request dispatcher.  防止死循环请求，当前的请求是不是响应的请求
 		String dispatcherPath = prepareForRendering(request, response);
 
 		// Obtain a RequestDispatcher for the target resource (typically a JSP).

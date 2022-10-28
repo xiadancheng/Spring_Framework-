@@ -1,6 +1,7 @@
 package com.tuling.xml.controller;
 
 import com.tuling.javaconfig.initbinder.User;
+import org.springframework.beans.factory.BeanNameAware;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
@@ -17,7 +18,7 @@ import java.util.List;
  */
 @Controller
 @RequestMapping("/request")
-public class RequestMappingController {
+public class RequestMappingController implements BeanNameAware {
 
     @RequestMapping("/mapping")
     public ModelAndView mapping(){
@@ -60,5 +61,8 @@ public class RequestMappingController {
     }
 
 
-
+	@Override
+	public void setBeanName(String name) {
+		System.out.println("aaaa"+name);
+	}
 }

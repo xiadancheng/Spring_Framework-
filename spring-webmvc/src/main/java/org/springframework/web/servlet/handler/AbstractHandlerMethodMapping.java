@@ -219,10 +219,10 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	 * @see #handlerMethodsInitialized
 	 */
 	protected void initHandlerMethods() {
-		// 获得所有候选beanName—— 当前容器所有的beanName
+		// 1.获得所有候选beanName—— 当前容器所有的beanName
 		for (String beanName : getCandidateBeanNames()) {
 			if (!beanName.startsWith(SCOPED_TARGET_NAME_PREFIX)) {
-				// *处理候选bean——即解析@RequestMapping和映射路径
+				// 2.循环处理所有的BeanClass,解析所有的handler
 				processCandidateBean(beanName);
 			}
 		}
@@ -256,6 +256,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	protected void processCandidateBean(String beanName) {
 		Class<?> beanType = null;
 		try {
+//		1.根据beanName获取类型
 			beanType = obtainApplicationContext().getType(beanName);
 		}
 		catch (Throwable ex) {
@@ -264,7 +265,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				logger.trace("Could not resolve type for bean '" + beanName + "'", ex);
 			}
 		}
-		// 这一步判断是关键  是否有Controller 或 RequestMapping注解
+		// 这一步判断是关键  判断类上是否有Controller 或 RequestMapping注解
 		if (beanType != null && isHandler(beanType)) {
 			// 解析HandlerMethods
 			detectHandlerMethods(beanName);
@@ -282,7 +283,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 
 		if (handlerType != null) {
 			Class<?> userType = ClassUtils.getUserClass(handlerType);
-			// 循环所有方法
+			// 循环所有方法，解析@RequestMapping方法
 			Map<Method, T> methods = MethodIntrospector.selectMethods(userType,
 					(MethodIntrospector.MetadataLookup<T>) method -> {
 						try {
@@ -463,7 +464,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			//把最匹配的设置到request中
 			request.setAttribute(BEST_MATCHING_HANDLER_ATTRIBUTE, bestMatch.getHandlerMethod());
 			handleMatch(bestMatch.mapping, lookupPath, request);
-			//返回最匹配的
+			//返回最匹配的,返回处理器的方法
 			return bestMatch.getHandlerMethod();
 		}
 		else { // return null
@@ -663,6 +664,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 				HandlerMethod handlerMethod = createHandlerMethod(handler, method);
 				validateMethodMapping(handlerMethod, mapping);
 
+
 				Set<String> directPaths = AbstractHandlerMethodMapping.this.getDirectPaths(mapping);
 				for (String path : directPaths) {
 					this.pathLookup.add(path, mapping);
@@ -680,6 +682,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 					this.corsLookup.put(handlerMethod, corsConfig);
 				}
 
+				//所有
 				this.registry.put(mapping,
 						new MappingRegistration<>(mapping, handlerMethod, directPaths, name, corsConfig != null));
 			}
@@ -688,6 +691,11 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 			}
 		}
 
+		/**
+		 * 判断是否已经存在相同路径映射
+		 * @param handlerMethod
+		 * @param mapping
+		 */
 		private void validateMethodMapping(HandlerMethod handlerMethod, T mapping) {
 			MappingRegistration<T> registration = this.registry.get(mapping);
 			HandlerMethod existingHandlerMethod = (registration != null ? registration.getHandlerMethod() : null);
