@@ -60,9 +60,9 @@ public abstract class AbstractDispatcherServletInitializer extends AbstractConte
 
 	@Override
 	public void onStartup(ServletContext servletContext) throws ServletException {
-		//registerContextLoaderListener  ok
+		//registerContextLoaderListener  ok注册父容器
 		super.onStartup(servletContext);
-		// registerDispatcherServlet
+		// registerDispatcherServlet	注册子容器
 		registerDispatcherServlet(servletContext);
 	}
 

@@ -206,6 +206,7 @@ public abstract class AbstractHandlerMethodMapping<T> extends AbstractHandlerMap
 	/**
 	 * Detects handler methods at initialization.
 	 * @see #initHandlerMethods
+	 * 初始化时调用
 	 */
 	@Override
 	public void afterPropertiesSet() {

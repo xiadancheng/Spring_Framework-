@@ -45,8 +45,9 @@ public class Test {
 */
 
 		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		UserService userService = (UserService) context.getBean("userService");
-		userService.test();
+		Object boFactoryBean = context.getBean("boFactoryBean");
+
+//		System.out.println(boFactoryBean);
 
 	}
 

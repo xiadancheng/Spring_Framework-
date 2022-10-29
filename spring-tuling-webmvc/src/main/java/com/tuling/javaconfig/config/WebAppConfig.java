@@ -33,6 +33,7 @@ public class WebAppConfig implements WebMvcConfigurer{
 		return new TulingInterceptor();
 	}
 
+
 	/**
 	 * 文件上传下载的组件
 	 * @return

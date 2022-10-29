@@ -559,7 +559,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 	 * @see #setContextConfigLocation
 	 */
 	protected WebApplicationContext initWebApplicationContext() {
-		// 获得ContextLoaderListener存的父容器
+		// 1.从servlet域中获得ContextLoaderListener存的父容器
 		WebApplicationContext rootContext =
 				WebApplicationContextUtils.getWebApplicationContext(getServletContext());
 		WebApplicationContext wac = null;
@@ -683,6 +683,8 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		wac.setServletConfig(getServletConfig());
 		wac.setNamespace(getNamespace());
 		// 监听器  委托设计模式
+		/*	// Publish the final event.发布事件  容器创建完毕时会发布这个事件，监听器就会处理
+		publishEvent(new ContextRefreshedEvent(this));*/
 		wac.addApplicationListener(new SourceFilteringListener(wac, new ContextRefreshListener()));
 
 		// 将init-param设置到Environment中
@@ -694,6 +696,7 @@ public abstract class FrameworkServlet extends HttpServletBean implements Applic
 		postProcessWebApplicationContext(wac);
 		// 容器启动前初始化
 		applyInitializers(wac);
+
 		wac.refresh();
 	}
 

@@ -19,10 +19,12 @@ import java.util.Set;
 @HandlesTypes(WebApplicationInitializer.class)
 public  class TulingSpringServletContainerInitializer extends SpringServletContainerInitializer {
 
+	/*SpringServletContainerInitializer*/
+
     /**
      *
      * @param webAppInitializerClasses 感兴趣类的集合
-     * @param servletContext Tomcat传过来的一个ServletContext
+     * @param servletContext Tomcat传过来的一个ServletContext容器
      * @throws ServletException
      */
     @Override
@@ -36,4 +38,6 @@ public  class TulingSpringServletContainerInitializer extends SpringServletConta
             }
         }).addMapping("/spiServlet.do");
     }
+
+
 }

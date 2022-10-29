@@ -257,6 +257,7 @@ public class ContextLoader {
 	 * @see #ContextLoader(WebApplicationContext)
 	 * @see #CONTEXT_CLASS_PARAM
 	 * @see #CONFIG_LOCATION_PARAM
+	 * 初始化容器
 	 */
 	public WebApplicationContext initWebApplicationContext(ServletContext servletContext) {
 		if (servletContext.getAttribute(WebApplicationContext.ROOT_WEB_APPLICATION_CONTEXT_ATTRIBUTE) != null) {
@@ -286,8 +287,9 @@ public class ContextLoader {
 						// The context instance was injected without an explicit parent ->
 						// determine parent for root web application context, if any.
 						ApplicationContext parent = loadParentContext(servletContext);
-						cwac.setParent(parent);
+						cwac.setParent(parent);//默认返回null
 					}
+//					配置刷新容器
 					configureAndRefreshWebApplicationContext(cwac, servletContext);
 				}
 			}
@@ -406,7 +408,7 @@ public class ContextLoader {
 		}
 		// 在容器加载前 可以通过设置初始化参数contextInitializerClasses、globalInitializerClasses 进行扩展
 		customizeContext(sc, wac);
-		// 刷新容器
+		// 刷新容器，根据配置类启动父容器
 		wac.refresh();
 	}
 

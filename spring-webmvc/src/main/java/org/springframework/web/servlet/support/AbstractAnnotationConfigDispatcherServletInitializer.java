@@ -53,6 +53,14 @@ public abstract class AbstractAnnotationConfigDispatcherServletInitializer
 	@Override
 	@Nullable
 	protected WebApplicationContext createRootApplicationContext() {
+
+		/*
+		注册父容器
+		* <listener>
+        	<listener-class>org.springframework.web.context.ContextLoaderListener</listener-class>
+    	</listener>
+    	*
+		* */
 		Class<?>[] configClasses = getRootConfigClasses();
 		if (!ObjectUtils.isEmpty(configClasses)) {
 			AnnotationConfigWebApplicationContext context = new AnnotationConfigWebApplicationContext();

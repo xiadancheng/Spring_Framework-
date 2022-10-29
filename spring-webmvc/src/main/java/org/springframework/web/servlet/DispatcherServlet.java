@@ -492,6 +492,7 @@ public class DispatcherServlet extends FrameworkServlet {
 	/**初始化策略,加了s都是多个
 	 * Initialize the strategy objects that this servlet uses.
 	 * <p>May be overridden in subclasses in order to initialize further strategy objects.
+	 * 设置组件到Dispatcher里面
 	 */
 	protected void initStrategies(ApplicationContext context) {
 		initMultipartResolver(context);
@@ -589,7 +590,7 @@ public class DispatcherServlet extends FrameworkServlet {
 
 		// 根据类型（多个）   默认true
 		if (this.detectAllHandlerMappings) {
-			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.
+			// Find all HandlerMappings in the ApplicationContext, including ancestor contexts.1.先去容器中拿
 			Map<String, HandlerMapping> matchingBeans =
 					BeanFactoryUtils.beansOfTypeIncludingAncestors(context, HandlerMapping.class, true, false);
 			if (!matchingBeans.isEmpty()) {

@@ -169,7 +169,7 @@ public abstract class HttpServletBean extends HttpServlet implements Environment
 		}
 
 		// Let subclasses do whatever initialization they like.
-		// 初始化Servlet，创建Spring容器
+		// 0xml方式初始化Servlet，创建Spring容器
 		initServletBean();
 	}
 

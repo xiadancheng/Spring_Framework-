@@ -1,29 +1,7 @@
 package com.zhouyu;
 
 
-import com.zhouyu.advice.ZhouyuBeforeAdvice;
-import com.zhouyu.advisor.ZhouyuPointcutAdvisor;
-import com.zhouyu.service.UserService;
-import org.apache.ibatis.session.SqlSessionFactory;
-import org.mybatis.spring.SqlSessionFactoryBean;
-import org.mybatis.spring.mapper.MapperScannerConfigurer;
-import org.springframework.aop.aspectj.annotation.AnnotationAwareAspectJAutoProxyCreator;
-import org.springframework.aop.framework.ProxyFactoryBean;
-import org.springframework.aop.framework.autoproxy.BeanNameAutoProxyCreator;
-import org.springframework.aop.framework.autoproxy.DefaultAdvisorAutoProxyCreator;
-import org.springframework.aop.support.DefaultPointcutAdvisor;
-import org.springframework.aop.support.NameMatchMethodPointcut;
 import org.springframework.context.annotation.*;
-import org.springframework.jdbc.core.JdbcTemplate;
-import org.springframework.jdbc.datasource.DataSourceTransactionManager;
-
-
-import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.transaction.PlatformTransactionManager;
-import org.springframework.transaction.annotation.EnableTransactionManagement;
-
-
-import javax.sql.DataSource;
 
 
 //@Import({HanxinImport.class})
@@ -32,7 +10,7 @@ import javax.sql.DataSource;
 //@Configuration(proxyBeanMethods = true)
 //@PropertySource("spring.properties")//导入spring.properties内容
 //@Component
-@ComponentScan("com.zhouyu")
+//@ComponentScan("com.zhouyu")
 //@ImportResource("spring.xml")
 //@ComponentScan("com.zhouyu.service")
 //@Configuration(proxyBeanMethods = true)
@@ -43,7 +21,7 @@ import javax.sql.DataSource;
 //@Import(AnnotationAwareAspectJAutoProxyCreator.class)//只会找advie类型的bean
 //@EnableAspectJAutoProxy()
 @Configuration
-@EnableTransactionManagement
+//@EnableTransactionManagement
 public class AppConfig{
 /*	@Bean
 	public MapperScannerConfigurer mapperScannerConfigurer(){
@@ -126,6 +104,13 @@ public class AppConfig{
 	* */
 
 	@Bean
+	public BoFactoryBean boFactoryBean(){
+		return new BoFactoryBean();
+	}
+/*
+
+
+	@Bean
 	public PlatformTransactionManager transactionManager(){
 		DataSourceTransactionManager transactionManager = new DataSourceTransactionManager();
 		transactionManager.setDataSource(dataSource());
@@ -155,6 +140,7 @@ public class AppConfig{
 		return jdbcTemplate;
 	}
 
+*/
 
 
 }

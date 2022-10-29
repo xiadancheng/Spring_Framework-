@@ -44,10 +44,14 @@ public class DelegatingWebMvcConfiguration extends WebMvcConfigurationSupport {
 
 	private final WebMvcConfigurerComposite configurers = new WebMvcConfigurerComposite();
 
-
+	/**
+	 * 自动注入实现过WebMvcConfigurer接口的类
+	 * @param configurers
+	 */
 	@Autowired(required = false)
 	public void setConfigurers(List<WebMvcConfigurer> configurers) {
 		if (!CollectionUtils.isEmpty(configurers)) {
+//
 			this.configurers.addWebMvcConfigurers(configurers);
 		}
 	}
