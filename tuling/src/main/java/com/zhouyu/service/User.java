@@ -7,9 +7,16 @@ import org.springframework.stereotype.Component;
 public class User {
 
 
-	private String name;
+	private Integer id;
+	private String name	;
 
-	private String name2;
+	public Integer getId() {
+		return id;
+	}
+
+	public void setId(Integer id) {
+		this.id = id;
+	}
 
 	public String getName() {
 		return name;
@@ -19,5 +26,11 @@ public class User {
 		this.name = name;
 	}
 
-
+	@Override
+	public String toString() {
+		return "User{" +
+				"id=" + id +
+				", name='" + name + '\'' +
+				'}';
+	}
 }

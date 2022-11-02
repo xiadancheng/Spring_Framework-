@@ -1,7 +1,17 @@
 package com.zhouyu;
 
 
+import com.zhouyu.editor.StringToUserPropertyEditor;
+import com.zhouyu.service.User;
+import com.zhouyu.service.UserService;
+import org.springframework.beans.factory.config.CustomEditorConfigurer;
+import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.*;
+import org.springframework.context.support.ResourceBundleMessageSource;
+
+import java.beans.PropertyEditor;
+import java.util.HashMap;
+import java.util.Map;
 
 
 //@Import({HanxinImport.class})
@@ -21,8 +31,40 @@ import org.springframework.context.annotation.*;
 //@Import(AnnotationAwareAspectJAutoProxyCreator.class)//只会找advie类型的bean
 //@EnableAspectJAutoProxy()
 @Configuration
+@ComponentScan(value = "com.zhouyu",
+		excludeFilters = {@ComponentScan.Filter(
+				type = FilterType.ASSIGNABLE_TYPE,
+				classes = UserService.class)})
 //@EnableTransactionManagement
 public class AppConfig{
+
+
+/*	@Bean
+	public UserService userService(){
+		return new UserService();
+	}*/
+
+/*
+//	国际化
+	@Bean
+	public MessageSource messageSource(){
+		ResourceBundleMessageSource messageSource = new ResourceBundleMessageSource();
+		messageSource.setBasename("message");//将国际化资源文件设置在messageSource中
+		return messageSource;
+	}
+
+	@Bean
+	public CustomEditorConfigurer customEditorConfigurer() {
+		CustomEditorConfigurer customEditorConfigurer = new CustomEditorConfigurer();
+		Map<Class<?>, Class<? extends PropertyEditor>> propertyEditorMap = new HashMap<>();
+
+		// 表示StringToUserPropertyEditor可以将String转化成User类型，在Spring源码中，如果发现当前对象是String，而需要的类型是User，就会使用该PropertyEditor来做类型转化
+		propertyEditorMap.put(User.class, StringToUserPropertyEditor.class);
+		customEditorConfigurer.setCustomEditors(propertyEditorMap);
+		return customEditorConfigurer;
+	}
+*/
+
 /*	@Bean
 	public MapperScannerConfigurer mapperScannerConfigurer(){
 		MapperScannerConfigurer mapperScannerConfigurer = new MapperScannerConfigurer();
@@ -103,10 +145,10 @@ public class AppConfig{
 	final TransactionManager tm = determineTransactionManager(txAttr);
 	* */
 
-	@Bean
+/*	@Bean
 	public BoFactoryBean boFactoryBean(){
 		return new BoFactoryBean();
-	}
+	}*/
 /*
 
 
