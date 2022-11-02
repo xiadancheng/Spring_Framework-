@@ -5,6 +5,7 @@ import com.zhouyu.advice.ZhouyuAfterReturningAdvice;
 import com.zhouyu.advice.ZhouyuAroundAdvice;
 import com.zhouyu.advice.ZhouyuBeforeAdvice;
 import com.zhouyu.advisor.ZhouyuPointcutAdvisor;
+import com.zhouyu.service.OrderService;
 import com.zhouyu.service.UserService;
 import com.zhouyu.service.UserServiceInterface;
 import org.aopalliance.aop.Advice;
@@ -15,6 +16,8 @@ import org.springframework.aop.PointcutAdvisor;
 import org.springframework.aop.framework.ProxyFactory;
 import org.springframework.aop.framework.ProxyFactoryBean;
 import org.springframework.aop.framework.adapter.AfterReturningAdviceInterceptor;
+import org.springframework.beans.factory.support.AbstractBeanDefinition;
+import org.springframework.beans.factory.support.BeanDefinitionBuilder;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 import java.io.IOException;
@@ -23,31 +26,17 @@ import java.io.IOException;
 public class Test {
 
 	public static void main(String[] args) throws IOException {
-/*
 
-		UserService target = new UserService();
+		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext();
+		context.register(AppConfig.class);
+		UserService userService = context.getBean("userService", UserService.class);
 
-		ProxyFactory proxyFactory = new ProxyFactory();
-		proxyFactory.setTarget(target);
-//		proxyFactory.setProxyTargetClass(true);
-		proxyFactory.setInterfaces(UserServiceInterface.class);
-		proxyFactory.addAdvice(new ZhouyuBeforeAdvice());
-		proxyFactory.addAdvice(new ZhouyuAroundAdvice());
-		proxyFactory.addAdvisor(new ZhouyuPointcutAdvisor());
-//		proxyFactory.setProxyTargetClass(true);
+		AbstractBeanDefinition beanDefinition = BeanDefinitionBuilder.genericBeanDefinition().getBeanDefinition();
+		beanDefinition.setBeanClass(OrderService.class);
+		beanDefinition.setScope("prototype");
+		context.registerBeanDefinition("orderService",beanDefinition);
+		context.refresh();
 
-
-
-
-		UserServiceInterface userService = (UserServiceInterface) proxyFactory.getProxy();//获取代理对象
-
-		userService.test();//advice链
-*/
-
-		AnnotationConfigApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
-		Object boFactoryBean = context.getBean("boFactoryBean");
-
-//		System.out.println(boFactoryBean);
 
 	}
 
