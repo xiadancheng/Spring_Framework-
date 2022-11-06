@@ -103,10 +103,10 @@ public class AppConfig{
 	final TransactionManager tm = determineTransactionManager(txAttr);
 	* */
 
-	@Bean
+/*	@Bean
 	public BoFactoryBean boFactoryBean(){
 		return new BoFactoryBean();
-	}
+	}*/
 /*
 
 
